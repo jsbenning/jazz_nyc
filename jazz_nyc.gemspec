@@ -6,11 +6,11 @@ require 'jazz_nyc/version'
 Gem::Specification.new do |spec|
   spec.name          = "jazz_nyc"
   spec.version       = JazzNyc::VERSION
-  spec.authors       = ["TODO: Write your name"]
-  spec.email         = ["TODO: Write your email address"]
+  spec.authors       = ["Josef Benninghoff"]
+  spec.email         = ["jsbenning4@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = "Jazz in NYC"
+  spec.description   = "Provides information about upcoming jazz events in New York City"
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 
@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  s.add_development_dependency "nokogiri", ">= 0"
 end

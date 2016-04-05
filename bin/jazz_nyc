@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require './lib/jazz_nyc'
+
+JazzNyc::CLI.new.call
+
+
