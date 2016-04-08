@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Jazz in NYC"
   spec.description   = "Provides information about upcoming jazz events in New York City"
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/jsbenning/jazz_nyc"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
@@ -30,5 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
-  s.add_development_dependency "nokogiri", ">= 0"
+  spec.add_development_dependency "nokogiri", ">= 0"
+  spec.add_development_dependency "colorize", "~> 0.7.7"
 end

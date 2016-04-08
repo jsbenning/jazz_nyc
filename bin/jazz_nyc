@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require './lib/jazz_nyc'
+require_relative '../lib/jazz_nyc'
 
 JazzNyc::CLI.new.call
 
