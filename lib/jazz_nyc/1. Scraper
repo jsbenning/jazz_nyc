@@ -1,0 +1,20 @@
+1. Scraper 
+  Its responsible for getting data
+
+  Scraper::Smalls
+  Scarpers::Carlyel
+
+ get the raw data 
+ {} # normalizing 
+
+2. Event
+  Stores the data for each event and provides the rest of the program an interface for interacting with events
+
+  Event.find_by_venue("Smalls") #> [#<Event>, #<Evet]
+  Event.all
+  event.performer
+  event.venue
+  event.similar_venue
+  event.similar_performer
+
+3. CLI/MENU
