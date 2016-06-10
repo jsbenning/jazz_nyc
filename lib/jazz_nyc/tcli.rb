@@ -1,11 +1,9 @@
 # The CLI Controller
-
-
 class JazzNyc::CLI
 
   
   def call
-    JazzNyc::Scraper.scrape_smalls  #had new
+    JazzNyc::Scraper.scrape_smalls  
     puts "--------------------"
     puts ""
     puts "Welcome to Jazz NYC!"

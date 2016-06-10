@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/jazz_nyc'
+
+require "bundler/setup"
+require "jazz_nyc"
 
 JazzNyc::CLI.new.call
 
