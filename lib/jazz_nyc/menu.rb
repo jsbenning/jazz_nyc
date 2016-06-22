@@ -2,7 +2,7 @@ require 'pry'
 require 'colorize'
 
 class JazzNyc::Menu
-  def self.home
+   def self.home
     puts " "
     puts "What would you like to do now?".colorize(:red)
     puts " "
@@ -14,7 +14,7 @@ class JazzNyc::Menu
     when "1"
       Event.complete_list
     when "2"
-      puts "Enter the day or date (numerical month / day) you would like to check out:"
+      puts "Enter the day or date (numerical month / day) you would like to check out:".colorize(:red)
       day = gets.chomp
       if day.include?("/")
         Event.date_search(day)
@@ -22,7 +22,7 @@ class JazzNyc::Menu
         Event.day_search(day)
       end
     when "3"
-      puts "Enter the performer or keyword (trio, etc.) you would like to search for:"
+      puts "Enter the performer or keyword (trio, etc.) you would like to search for:".colorize(:red)
       keyword = gets.chomp
       Event.keyword_search(keyword)
 
@@ -30,8 +30,10 @@ class JazzNyc::Menu
       puts "Here's a list of current venues:"
       venues = Event.all.map{|event| event.venue}
       venues.uniq!
-      venues.each{|e| puts e} 
-      puts "Enter the name of the venue you'd like to know more about"
+      puts ""
+      venues.each{|e| puts e.colorize(:blue)} 
+      puts ""
+      puts "Enter the name of the venue you'd like to know more about".colorize(:red)
       input = gets.chomp
       Event.list_venue(input)
 
@@ -43,7 +45,7 @@ class JazzNyc::Menu
       puts ""
       exit
     else
-      puts "I'm sorry, that's not a valid choice" 
+      puts "I'm sorry, that's not a valid choice".colorize(:red) 
       Menu.home 
     end
   end

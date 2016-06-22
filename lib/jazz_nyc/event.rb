@@ -4,7 +4,8 @@ require 'colorize'
 class JazzNyc::Event
   attr_accessor :venue, :day, :date, :time, :group
 
-  VENUES = [["Small's", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com"]] #venues should be added here in arrays
+  VENUES = VENUES = [["Small's", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com"],
+  ["The Village Vanguard", "178 7th Ave South", "Greenwich Village", "(212)255-4037", "villagevanguard.com"]] #venues should be added here in arrays
 
   @@all = []
 
@@ -33,32 +34,34 @@ class JazzNyc::Event
   end
 
   def self.formatting(event)
-    @head = "#{event.date} #{event.venue}"
-    if !(Event.headline.include?(event.date))
-      Event.headline << event.date
-      puts "#{event.day}   #{event.date}"
-      puts "--------------------------------" 
-    end
-    if !(Event.headline.include?(@head)) 
-      Event.headline << @head    
-      puts ("    " + event.venue + ":").colorize(:blue)
-    end
-    puts ""
-    @shows = event.time.zip(event.group).each{|time, group|}
-    @sorted_shows = @shows.sort do |a,b|
-      a[0].to_i <=> b[0].to_i
-    end
-    if @sorted_shows[0][0].include?("AM")
-      @sorted_shows.rotate!(1)
-    end
-      @sorted_shows.each do |time, group|
-      puts (time + " - " + group).colorize(:red)
+    if Event.headline == []
+      Event.headline << event
+    elsif !(Event.headline.include?(event)) &&  Event.headline.first.date == event.date
+      Event.headline << event
+    else 
+      puts "#{Event.headline.first.day}  #{Event.headline.first.date}"
+      puts "--------------------------------"   
+      Event.headline.sort_by!{ |a| a.venue}
+      @venue_list = []
+      Event.headline.each do |event|
+        if !(@venue_list.include?(event.venue))
+          @venue_list << event.venue
+          puts ("    " + event.venue + ":").colorize(:blue)
+        end
+        @shows = event.time.zip(event.group).each{|time, group|}
+          @shows.each do |time, group|
+          puts (time + " - " + group).colorize(:red)
+        end
+      end
       puts ""
+      Event.headline_clear
+      @venue_list = []
+      Event.formatting(event)
     end
   end
 
-  def self.complete_list  
-    #Event.all.each do |event|
+
+  def self.complete_list 
     @sorted = Event.all.sort_by{|event| event.date}
     @sorted.each do |event|
       Event.formatting(event)
@@ -69,48 +72,44 @@ class JazzNyc::Event
 
   def self.select_list(event)
     @event = event
-    puts ""
     puts @event.day + " " + @event.date
     puts "---------------------"
-    puts "    " + @event.venue + ":"
-    puts ""
+    puts ("    " + @event.venue + ":").colorize(:blue)
     @event.time.zip(@event.group).each do |time, group|
-        puts time + " - " + group
+        puts (time + " - " + group).colorize(:red)
     end
+     puts ""
   end
 
   def self.select_group(event, performer)
     @event = event
     @performer = performer
-    puts ""
     puts @event.day + " " + @event.date
     puts "---------------------"
-    puts "    " + @event.venue + ":"
-    puts ""
+    puts ("    " + @event.venue + ":").colorize(:blue)
     @event.time.zip(@event.group).each do |time, group|
       if group == @performer
-        puts time + " - " + group
+        puts (time + " - " + group).colorize(:red)
       end
     end
+    puts ""
   end
 
   def self.list_venue(input)
     @count = 0
     @input = input
     VENUES.each do |venue|
-      venue.each do |v| 
-        if v.downcase.include?(@input.downcase[0..-3])
-          puts ""
-          puts venue
-          puts ""
-          @count += 1
-          Menu.home
-        end
-        if @count == 0
-          puts "Sorry, we don't have any information about that venue."
-          Menu.home
-        end
+      if venue[0].downcase.include?(@input.downcase[0..-3])
+        puts ""
+        puts venue
+        puts ""
+        @count += 1
+        Menu.home
       end
+    end
+    if @count == 0
+      puts "Sorry, we don't have any information about that venue.".colorize(:red)
+    Menu.home  
     end   
   end
 
@@ -126,7 +125,7 @@ class JazzNyc::Event
       end
     end
     if @count == 0
-      puts "Sorry, I can't find a date like that."
+      puts "Sorry, I can't find a date like that.".colorize(:red)
     end
     Menu.home
   end
@@ -143,7 +142,7 @@ class JazzNyc::Event
         end
       end  
       if @count == 0
-        puts "Sorry, I can't find a day like that." 
+        puts "Sorry, I can't find a day like that.".colorize(:red) 
       end
     end
     Menu.home
@@ -161,7 +160,7 @@ class JazzNyc::Event
       end
     end
     if @count == 0
-      puts "Sorry, I can't find a keyword or performer with that name."
+      puts "Sorry, I can't find a keyword or performer with that name.".colorize(:red)
     end 
     Menu.home  
   end
