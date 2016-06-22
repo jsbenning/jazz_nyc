@@ -3,13 +3,16 @@ class BlueScraper
   require 'open-uri'
   attr_accessor :events
 
+  #venue, day, date, group=array, time=array
 
     def self.scrape
     events = Hash.new
     page = Nokogiri::HTML(open("http://www.bluenote.net/newyork/schedule/index.shtml"))
     page.css("center").each do |day|
       events[:venue] = "Blue Note"
-      events[:group] = day.css("td[class='show']").map{|e| e.text}
+      events[:group] = day.css("td[class='show']").css("p").each{|e| e.text}
+
+      events[:time] = day.css("dt").map{|x| x.text}
 
       #events[:day] = day.css("h2").text
         #events[:time] = day.css("dt").map{|x| x.text}
@@ -42,4 +45,4 @@ class Event
   end 
 end
 
-BlueScraper.scrape
+#BlueScraper.scrape
