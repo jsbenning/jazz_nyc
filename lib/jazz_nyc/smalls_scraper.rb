@@ -13,11 +13,15 @@ class JazzNyc::SmallsScraper
       events[:venue] = "Smalls"
       events[:day] = day.css("h2").text[0...3]
       @my_date = day.css("h2").text.split(" ")[1].split("/")
-      events[:date] = @my_date[0] + "/" + @my_date[1]
-        events[:time] = day.css("dt").map{|x| x.text.split(" - ")[0]}
-        events[:group] = day.css("dd").css("a").map{|x| x.text}
+      if @my_date[1].length == 1
+        events[:date] = @my_date[0] + "/" + "0" + @my_date[1]
+      else
+        events[:date] = @my_date[0] + "/" + @my_date[1]
+      end
+      events[:time] = day.css("dt").map{|x| x.text.split(" - ")[0]}
+      events[:group] = day.css("dd").css("a").map{|x| x.text}
+      events[:bio] = day.css("dd").css("a").map{|x| x['href']}
       Event.new(events)
     end
   end
-end
 

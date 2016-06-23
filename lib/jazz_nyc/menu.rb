@@ -6,7 +6,7 @@ class JazzNyc::Menu
     puts " "
     puts "What would you like to do now?".colorize(:red)
     puts " "
-    puts "1 = See All Shows, 2 = Find Shows by Date/Day, 3 = Search Shows by Keyword/Performer, 4 = Get Venue Info, 5 = Exit".colorize(:blue)
+    puts "1 = See All Shows, 2 = Find Shows by Date/Day, 3 = Search Shows by Keyword/Performer, 4 = Get Venue Info, 5 = Get Performer Bios, 6 = Exit".colorize(:blue)
     puts " "
     input = gets.chomp
 
@@ -38,6 +38,21 @@ class JazzNyc::Menu
       Event.list_venue(input)
 
     when "5"
+      puts " "
+      puts "Here are all the current performers I might have bios for: ".colorize(:red)
+      puts " "
+      Event.all.each do |event|
+        if event.venue == "Smalls" && !(event.group.include?("THERE WILL BE"))
+          puts event.group
+        end
+      end
+      puts " "
+      puts "Who would you like to know more about?".colorize(:red)
+      puts "(Enter the first ".colorize(:blue) + "OR ".colorize(:red) + "last name for artist & group info)".colorize(:blue)
+      input = gets.downcase.strip
+      Event.bio_search(input)  
+
+    when "6"
       Event.clear
       puts ""
       puts "See you at the shows, Jazz Fans!".colorize(:red)

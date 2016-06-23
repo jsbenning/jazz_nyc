@@ -2,11 +2,7 @@ require 'pry'
 require 'colorize'
 
 class JazzNyc::Event
-require 'pry'
-require 'colorize'
-
-class Event
-  attr_accessor :venue, :day, :date, :time, :group
+ attr_accessor :venue, :day, :date, :time, :group, :bio
 
   VENUES = VENUES = [["Small's", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com"],
   ["The Village Vanguard", "178 7th Ave South", "Greenwich Village", "(212)255-4037", "villagevanguard.com"]] #venues should be added here in arrays
@@ -46,8 +42,8 @@ class Event
   end
 
   def self.printer(event)
-    @date = " #{event.date} "
-    @id = " #{event.date} #{event.venue}"
+    @date = " #{event.date} " #ensures that date only prints once
+    @id = " #{event.date} #{event.venue}" #ensures that venue only prints once per date
     if !(@@grouper.include?(@date))
       puts event.day + " " + event.date
       puts "---------------------"
@@ -65,6 +61,7 @@ class Event
       puts (time + " - " + group).colorize(:red)
     end
     puts ""
+    @show.clear
     @@grouper << @date
     @@grouper << @id
   end
@@ -72,21 +69,26 @@ class Event
   def self.list_venue(input)
     @count = 0
     VENUES.each do |venue|
-      if venue[0].downcase.include?(input.downcase[0..-3])
+      if venue[0].downcase.include?(input.downcase[0..-2])
         puts ""
         puts venue
         puts ""
         @count += 1
-        puts "Here are some upcoming performances at that venue:"
-      end
-      Event.all.each do |event|
-        if event.venue.downcase.include?(input.downcase[0..-3])
-          Event.printer(event)
+        puts "Would you like to check out upcoming shows just for this venue?(y/n)"
+        @answer = gets.downcase.strip
+        if @answer == "y"
+          Event.all.each do |event|
+            if event.venue.downcase.include?(input.downcase[0..-2])
+            Event.printer(event)
+            end
+          end
+        else
+          Event.jump
         end
       end
     end
     if @count == 0
-      puts "Sorry, we don't have any information about that venue.".colorize(:red)
+      puts "Sorry, I don't have any information about that venue.".colorize(:red)
     end
     Event.jump   
   end
@@ -129,8 +131,9 @@ class Event
     @count = 0
     Event.all.each do |event|
       event.group.each do |performer|
-        if performer.include?(keyword[0..-2] || keyword.downcase[0..-2] || keyword.capitalize[0..-2])
+        if performer.downcase.include?( keyword || keyword.downcase )
           @count += 1
+
           Event.printer(event)
         end
       end
@@ -139,6 +142,45 @@ class Event
       puts "Sorry, I couldn't find a keyword or performer that matched.".colorize(:red)
     end 
     Event.jump 
+  end
+
+  def self.bio_search(input)
+    @count = 0
+    Event.all.each do |event|
+      event.bio.each do |link|
+        @search_term = link.split("-")
+        @search_term.join("")
+        if @search_term.include?(input)
+          @count += 1
+          self.profile("https://www.smallslive.com" + (link)) 
+        end  
+      end
+    end
+    if @count == 0
+      puts ""
+      puts "Sorry, we don't have any info about that artist.".colorize(:red)
+      puts ""
+    end
+    Event.jump
+  end
+
+  def self.profile(link)
+    band = []
+    page = Nokogiri::HTML(open(link))
+    page.css("div[class ='mini-artist col-xs-12 col-sm-6']").each do |e|
+      e.css("a").each do |link|
+        band << "https://www.smallslive.com" + (link.attribute("href").value.to_s)
+      end
+    end
+    band = band.uniq
+    band.each do |member|
+      page = Nokogiri::HTML(open(member))
+      puts " "
+      puts page.css("h1[class='artist-details__name']").text
+      puts " "
+      puts page.css("div[class='artist-bio__text-block']").css("p").text
+    end
+    Event.jump
   end
 
 end
