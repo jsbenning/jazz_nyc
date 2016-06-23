@@ -1,11 +1,11 @@
-require 'pry'
+#require 'pry'
 require 'colorize'
 
-class JazzNyc::CLI
+class JazzNyc::CLI  
 
-  def call
-    SmallsScraper.scrape  #call all scrapers here
-    VanScraper.scrape
+  def welcome
+    Scraper.smalls_scraper #call all scrapers here
+    Scraper.van_scraper
     Event.sort # put after the scrapers to make sure Event class is organized by date, then venue
     puts ""
     puts "      -----------------------------------------"
@@ -15,8 +15,70 @@ class JazzNyc::CLI
     puts "      -----------------------------------------"
     puts ""
     puts "                 Today is #{DateTime.now.strftime('%m/%d/%Y')}"
-    Menu.home 
+    CLI.call
   end
+
+  def self.call
+    puts " "
+    puts "What would you like to do now?".colorize(:red)
+    puts " "
+    puts "1 = See All Shows, 2 = Find Shows by Date/Day, 3 = Search Shows by Keyword/Performer, 4 = Get Venue Info, 5 = Get Performer Bios, 6 = Exit".colorize(:blue)
+    puts " "
+    input = gets.chomp
+
+    case input
+    when "1"
+      Event.complete_list
+    when "2"
+      puts "Enter the day or date (numerical month / day) you would like to check out:".colorize(:red)
+      day = gets.chomp
+      if day.include?("/")
+        Event.date_search(day)
+      else
+        Event.day_search(day)
+      end
+    when "3"
+      puts "Enter the performer or keyword (trio, etc.) you would like to search for:".colorize(:red)
+      keyword = gets.chomp
+      Event.keyword_search(keyword)
+
+    when "4"
+      puts "Here's a list of current venues:"
+      venues = Event.all.map{|event| event.venue}
+      venues.uniq!
+      puts ""
+      venues.each{|e| puts e.colorize(:blue)} 
+      puts ""
+      puts "Enter the name of the venue you'd like to know more about".colorize(:red)
+      input = gets.chomp
+      Event.list_venue(input)
+
+    when "5"
+      puts " "
+      puts "Here are all the current performers I might have bios for: ".colorize(:red)
+      puts " "
+      Event.all.each do |event|
+        if event.venue == "Smalls" && !(event.group.include?("THERE WILL BE"))
+          puts event.group
+        end
+      end
+      puts " "
+      puts "Who would you like to know more about?".colorize(:red)
+      puts "(Enter the first ".colorize(:blue) + "OR ".colorize(:red) + "last name for artist & group info)".colorize(:blue)
+      input = gets.downcase.strip
+      Event.bio_search(input)  
+
+    when "6"
+      Event.clear
+      puts ""
+      puts "See you at the shows, Jazz Fans!".colorize(:red)
+      puts "Thanks!".colorize(:red)
+      puts ""
+      exit
+    else
+      puts "I'm sorry, that's not a valid choice".colorize(:red) 
+      call 
+    end
+  end
+  
 end
-
-

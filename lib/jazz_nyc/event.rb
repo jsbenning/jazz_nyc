@@ -1,4 +1,4 @@
-require 'pry'
+#require 'pry'
 require 'colorize'
 
 class JazzNyc::Event
@@ -27,6 +27,7 @@ class JazzNyc::Event
     end
     @@grouper = [] #initializes an array for sorting events
     @@all << self
+    Event.sort
   end
 
   def self.complete_list

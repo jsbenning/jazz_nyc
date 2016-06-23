@@ -4,6 +4,6 @@
 require "bundler/setup"
 require "jazz_nyc"
 
-JazzNyc::CLI.new.call
+JazzNyc::CLI.new.welcome
 
 
