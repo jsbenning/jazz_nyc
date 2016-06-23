@@ -1,6 +1,6 @@
 ## To be updated:
 
-This is the incomplete record of a gem project for scraping upcoming performance information from the website of Small's, a Manhattan jazz club. Revisions ongoing.
+This is a gem project for scraping upcoming performance information from select Manhattan jazz clubs. 
 
 
 ## Contributing
