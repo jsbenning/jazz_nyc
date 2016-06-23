@@ -2,11 +2,11 @@ require 'pry'
 require 'colorize'
 
 class JazzNyc::Menu
-   def self.home
+  def self.home
     puts " "
     puts "What would you like to do now?".colorize(:red)
     puts " "
-    puts "1 = See All Shows, 2 = Sort Shows by Date/Day, 3 = Search Shows by Keyword/Performer, 4 = Get Venue Info, 5 = Exit".colorize(:blue)
+    puts "1 = See All Shows, 2 = Find Shows by Date/Day, 3 = Search Shows by Keyword/Performer, 4 = Get Venue Info, 5 = Exit".colorize(:blue)
     puts " "
     input = gets.chomp
 
