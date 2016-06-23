@@ -1,4 +1,4 @@
-## To be updated:
+## Project Overview:
 
 This is a gem project for scraping upcoming performance information from select Manhattan jazz clubs. 
 
