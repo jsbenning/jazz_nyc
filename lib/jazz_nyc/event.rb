@@ -22,7 +22,7 @@ class Event
   end
 
   def self.sort
-    Event.all.sort_by!{|event| [event.date, event.venue}
+    Event.all.sort_by!{|event| [event.date, event.venue]}
   end
 
   def initialize(hash)
@@ -129,7 +129,8 @@ class Event
     @count = 0
     Event.all.each do |event|
       event.group.each do |performer|
-        if performer.include?(keyword[0..-3] || keyword.downcase[0..-3] || keyword.capitalize[0..-3])
+        if performer.include?(keyword[0..-2] || keyword.downcase[0..-2] || keyword.capitalize[0..-2])
+          @count += 1
           Event.printer(event)
         end
       end
