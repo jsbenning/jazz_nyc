@@ -29,14 +29,10 @@ class JazzNyc::CLI
       Event.complete_list
 
     when "2"
-      puts "Enter the day or date (numerical month / day) you would like to check out:".colorize(:red)
+      puts "Enter the day or date (numerical month/day) you would like to check out:".colorize(:red)
       day = gets.chomp
-      if day.include?("/")
-        Event.date_search(day)
-      else
-        Event.day_search(day)
-      end
-      
+      Event.day_search(day)
+
     when "3"
       puts "Enter the performer or keyword (trio, etc.) you would like to search for:".colorize(:red)
       keyword = gets.chomp
