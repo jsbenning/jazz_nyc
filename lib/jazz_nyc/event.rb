@@ -1,11 +1,20 @@
-#require 'pry'
-require 'colorize'
-
 class Event
   attr_accessor :venue, :day, :date, :time, :group, :bio
 
-  VENUES = [["Small's", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com"],
-  ["The Village Vanguard", "178 7th Ave South", "Greenwich Village", "(212)255-4037", "villagevanguard.com"]] #venues should be added here in arrays
+  def initialize(event_hash)
+    event_hash.each do |event_attribute, event_value|
+      self.send("#{event_attribute}=", event_value)
+    end
+
+    @@grouper = [] # initializes an empty class array which later helps cleanly format event printing
+    @@all << self
+  end
+
+  VENUES = [["Small's", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com", "", "Smalls Jazz Club was created in 1994 by the enigmatic Mitchell Borden. The original Smalls was a raw basement space and had no liquor license. For just $10, patrons could bring their own beer and come to the club at any time, day or night. They could stay as long as they liked and often left just as day began to break. Borden’s concern was only with the music and the musicians who created it. 
+  Under his generous care, a culture of vibrant and newly energized young musicians claimed Smalls as their home base and began to develop their individuality in the music.  Since 2007, Smalls Jazz Club has emerged as the top club of its kind – a throwback to another era when jazz clubs were both proving ground for top artists but also social scenes for the jazz community. Smalls Jazz Club now has a international reputation and draws fans from all over the world as a destination spot for great jazz."],
+  ["The Village Vanguard", "178 7th Ave South", "Greenwich Village", "(212)255-4037", "villagevanguard.com", "",  "Of New York's great jazz rooms, the Village Vanguard has the edge in terms of historical pedigree, sound, unique physical space, and ever-broadening booking policy, representing jazz across many generations and aesthetic viewpoints. The calendar is something: radical offerings from Henry Threadgill and John Zorn alongside great and underrated pianists George Cables, Kirk Lightsey, and Harold Mabern; young bandleaders of note such as Fabian Almazan and Rudy Royston next to established masters Fred Hersch, Tom Harrell, Joe Lovano, and Dave Douglas.  
+ 
+The Vanguard Opened in 1935 under Max Gordon, who ran it until his death in 1989. (The 80th anniversary is soon upon us, with 91-year old Lorraine Gordon, Max's Widow, still at the helm.) Classic Live at the Village Vanguard albums abound - suffice it to say that examples by John Coltrane, Sonny Rollins, and Bill Evans leap to mind. Now bands play for six nights straight, which means they're allowed to grow and evolve. There's a beauty in seeing saxophonist Ravi Coltrane invent and push ahead with his exraordinary quartet on the same bandstand where his father brought enduring glory to the Vanguard name back in '61.  - The Village Voice, October 2014"]] # venues should be added here in arrays with each attribute an element
 
   @@all = []
 
@@ -21,14 +30,6 @@ class Event
     Event.all.sort_by!{|event| [event.date, event.venue]}
   end
 
-  def initialize(hash)
-    hash.each do |k, v|
-      self.send "#{k}=", v
-    end
-    @@grouper = [] #initializes an array for sorting events
-    @@all << self
-  end
-
   def self.complete_list
     Event.all.each do |event| 
       Event.printer(event)
@@ -42,8 +43,8 @@ class Event
   end
 
   def self.printer(event)
-    @date = " #{event.date} " #ensures that date only prints once
-    @id = " #{event.date} #{event.venue}" #ensures that venue only prints once per date
+    @date = " #{event.date} " # ensures that date only prints once
+    @id = " #{event.date} #{event.venue}" # ensures that venue only prints once per date
     if !(@@grouper.include?(@date))
       puts "#{event.day}" + " " + "#{event.date}"
       puts "---------------------"    
@@ -61,6 +62,7 @@ class Event
     end
     @show.each do |time, group|
       puts (time + " - " + group).colorize(:red)
+      puts ""
     end
     puts ""
     @show.clear 
@@ -133,7 +135,6 @@ class Event
       event.group.each do |performer|
         if performer.include?(keyword) || performer.downcase.include?(keyword.downcase)
           @count += 1
-
           Event.printer(event)
         end
       end
@@ -182,5 +183,4 @@ class Event
     end
     Event.jump
   end
-
 end

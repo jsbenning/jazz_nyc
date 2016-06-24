@@ -1,11 +1,6 @@
-#require 'pry'
-require 'nokogiri'
-require 'open-uri'
-require 'colorize'
-
 class Scraper
   attr_accessor :events
-  #venue, day, date, time=array, group=array, bio(array)--only Smalls currently
+  #venue, day, date, time=array, group=array, bio=array -- only Smalls currently
 
   def self.smalls_scraper
     events = Hash.new
@@ -14,11 +9,13 @@ class Scraper
       events[:venue] = "Smalls"
       events[:day] = day.css("h2").text[0...3]
       @my_date = day.css("h2").text.split(" ")[1].split("/")
+
       if @my_date[1].length == 1
         events[:date] = @my_date[0] + "/" + "0" + @my_date[1]
       else
         events[:date] = @my_date[0] + "/" + @my_date[1]
       end
+
       events[:time] = day.css("dt").map{|x| x.text.split(" - ")[0]}
       events[:group] = day.css("dd").css("a").map{|x| x.text}
       events[:bio] = day.css("dd").css("a").map{|x| x['href']}
@@ -36,9 +33,11 @@ class Scraper
       events[:venue] = "The Village Vanguard"
       events[:day] = e.css("p[id='dow']").text
       @my_date =  e.css("p[id='event-date']").text[0...5].gsub!(".","/")
+
       if @my_date[0] == "0"
         @my_date = @my_date[1..-1]
       end
+
       events[:date] = @my_date 
       events[:time] =  e.css("p[id='event-time']").map{|x| x.text} 
       events[:group] = e.css("h1[id='event-title']").map{|x| x.text}
@@ -46,5 +45,4 @@ class Scraper
       Event.new(events)
     end
   end
-
 end

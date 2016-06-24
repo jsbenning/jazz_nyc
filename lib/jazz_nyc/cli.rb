@@ -1,6 +1,3 @@
-#require 'pry'
-require 'colorize'
-
 class JazzNyc::CLI  
 
   def welcome
@@ -27,8 +24,10 @@ class JazzNyc::CLI
     input = gets.chomp
 
     case input
+
     when "1"
       Event.complete_list
+
     when "2"
       puts "Enter the day or date (numerical month / day) you would like to check out:".colorize(:red)
       day = gets.chomp
@@ -37,6 +36,7 @@ class JazzNyc::CLI
       else
         Event.day_search(day)
       end
+      
     when "3"
       puts "Enter the performer or keyword (trio, etc.) you would like to search for:".colorize(:red)
       keyword = gets.chomp
@@ -58,7 +58,7 @@ class JazzNyc::CLI
       puts "Here are all the current performers I might have bios for: ".colorize(:red)
       puts " "
       Event.all.each do |event|
-        if event.venue == "Smalls" && !(event.group.include?("THERE WILL BE"))
+        if event.venue == "Smalls" 
           puts event.group
         end
       end
@@ -76,13 +76,9 @@ class JazzNyc::CLI
       puts ""
       exit
 
-    #when "7"                                               ###### admin error checking
-      #Event.all.each{|event| puts event.date, event.venue } 
-
     else
       puts "I'm sorry, that's not a valid choice".colorize(:red) 
       JazzNyc::CLI.call
     end
-  end
-  
+  end 
 end
