@@ -1,10 +1,10 @@
 #require 'pry'
 require 'colorize'
 
-class JazzNyc::Event
- attr_accessor :venue, :day, :date, :time, :group, :bio
+class Event
+  attr_accessor :venue, :day, :date, :time, :group, :bio
 
-  VENUES = VENUES = [["Small's", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com"],
+  VENUES = [["Small's", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com"],
   ["The Village Vanguard", "178 7th Ave South", "Greenwich Village", "(212)255-4037", "villagevanguard.com"]] #venues should be added here in arrays
 
   @@all = []
@@ -27,7 +27,6 @@ class JazzNyc::Event
     end
     @@grouper = [] #initializes an array for sorting events
     @@all << self
-    Event.sort
   end
 
   def self.complete_list
@@ -39,20 +38,22 @@ class JazzNyc::Event
 
   def self.jump
     @@grouper.clear
-    Menu.home
+    JazzNyc::CLI.call
   end
 
   def self.printer(event)
     @date = " #{event.date} " #ensures that date only prints once
     @id = " #{event.date} #{event.venue}" #ensures that venue only prints once per date
     if !(@@grouper.include?(@date))
-      puts event.day + " " + event.date
-      puts "---------------------"
+      puts "#{event.day}" + " " + "#{event.date}"
+      puts "---------------------"    
       puts ""
+      @@grouper << @date
     end
     if !(@@grouper.include?(@id))
-      puts ("    " + event.venue + ":").colorize(:blue)
+      puts ("    " + "#{event.venue}" + ":").colorize(:blue)
       puts ""
+      @@grouper << @id
     end
     @show = event.time.zip(event.group)
     @show.sort do |a, b|
@@ -62,9 +63,7 @@ class JazzNyc::Event
       puts (time + " - " + group).colorize(:red)
     end
     puts ""
-    @show.clear
-    @@grouper << @date
-    @@grouper << @id
+    @show.clear 
   end
 
   def self.list_venue(input)
@@ -96,16 +95,16 @@ class JazzNyc::Event
 
   def self.date_search(day)
     @count = 0 
-    @date = day.split("/")
+    @date_split = day.split("/")
     Event.all.each do |event|
-      @event_date = event.date.split("/") 
-      if @date[0] == @event_date[0] && @event_date[1] == ((@date[1]) || ("0" + @date[1]))
+      event_date = event.date.split("/") 
+      if @date_split[0] == event_date[0] && (@date_split[1] == event_date[1] || ("0" + @date_split[1]) ==  event_date[1]) 
         @count += 1
         Event.printer(event)
       end   
     end
     if @count == 0
-      puts "Sorry, I couldn't find a date that matched.".colorize(:red)
+      puts "Sorry, I couldn't find a matching date.".colorize(:red)
     end
     Event.jump
   end
@@ -123,7 +122,7 @@ class JazzNyc::Event
       end
     end
     if @count == 0
-      puts "Sorry, I could't find a day that matched.".colorize(:red) 
+      puts "Sorry, I could't find a matching day.".colorize(:red) 
     end
     Event.jump
   end
@@ -132,7 +131,7 @@ class JazzNyc::Event
     @count = 0
     Event.all.each do |event|
       event.group.each do |performer|
-        if performer.downcase.include?( keyword || keyword.downcase )
+        if performer.include?(keyword) || performer.downcase.include?(keyword.downcase)
           @count += 1
 
           Event.printer(event)

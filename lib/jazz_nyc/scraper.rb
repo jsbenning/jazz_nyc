@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'colorize'
 
-class JazzNyc::Scraper
+class Scraper
   attr_accessor :events
   #venue, day, date, time=array, group=array, bio(array)--only Smalls currently
 

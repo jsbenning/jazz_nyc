@@ -15,7 +15,7 @@ class JazzNyc::CLI
     puts "      -----------------------------------------"
     puts ""
     puts "                 Today is #{DateTime.now.strftime('%m/%d/%Y')}"
-    CLI.call
+    JazzNyc::CLI.call
   end
 
   def self.call
@@ -75,9 +75,13 @@ class JazzNyc::CLI
       puts "Thanks!".colorize(:red)
       puts ""
       exit
+
+    #when "7"                                               ###### admin error checking
+      #Event.all.each{|event| puts event.date, event.venue } 
+
     else
       puts "I'm sorry, that's not a valid choice".colorize(:red) 
-      call 
+      JazzNyc::CLI.call
     end
   end
   
