@@ -24,11 +24,8 @@ class Scraper
   end
 
   def self.van_scraper
-    
     events = Hash.new
-
     page = Nokogiri::HTML(open("http://www.instantseats.com/index.cfm?fuseaction=home.venue&VenueID=1&sid=3"))
-
     page.css("div[class='event-link-mobile']").each do |e|
       events[:venue] = "The Village Vanguard"
       events[:day] = e.css("p[id='dow']").text

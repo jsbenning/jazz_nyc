@@ -1,6 +1,6 @@
 ## Project Overview:
 
-This is a gem project for scraping upcoming performance information from select Manhattan jazz clubs. 
+This is a gem project for scraping upcoming performance information from select Manhattan jazz clubs. To see it in action: Once you have downloaded a copy of the repo, go to the root folder of the project (jazz_nyc) and type bin/jazz_nyc to begin.
 
 
 ## Contributing

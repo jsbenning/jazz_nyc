@@ -10,7 +10,7 @@ class Event
     @@all << self
   end
 
-  VENUES = [["Smalls", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com", "", "Smalls Jazz Club was created in 1994 by the enigmatic Mitchell Borden. The original Smalls was a raw basement space and had no liquor license. For just $10, patrons could bring their own beer and come to the club at any time, day or night. They could stay as long as they liked and often left just as day began to break. Borden’s concern was only with the music and the musicians who created it. 
+  VENUES = [["Small's", "183 W. 10th St.", "Greenwich Village", "smallslive@gmail.com", "", "Smalls Jazz Club was created in 1994 by the enigmatic Mitchell Borden. The original Smalls was a raw basement space and had no liquor license. For just $10, patrons could bring their own beer and come to the club at any time, day or night. They could stay as long as they liked and often left just as day began to break. Borden’s concern was only with the music and the musicians who created it. 
   Under his generous care, a culture of vibrant and newly energized young musicians claimed Smalls as their home base and began to develop their individuality in the music.  Since 2007, Smalls Jazz Club has emerged as the top club of its kind – a throwback to another era when jazz clubs were both proving ground for top artists but also social scenes for the jazz community. Smalls Jazz Club now has a international reputation and draws fans from all over the world as a destination spot for great jazz."],
   ["The Village Vanguard", "178 7th Ave South", "Greenwich Village", "(212)255-4037", "villagevanguard.com", "",  "Of New York's great jazz rooms, the Village Vanguard has the edge in terms of historical pedigree, sound, unique physical space, and ever-broadening booking policy, representing jazz across many generations and aesthetic viewpoints. The calendar is something: radical offerings from Henry Threadgill and John Zorn alongside great and underrated pianists George Cables, Kirk Lightsey, and Harold Mabern; young bandleaders of note such as Fabian Almazan and Rudy Royston next to established masters Fred Hersch, Tom Harrell, Joe Lovano, and Dave Douglas.  
  
@@ -94,6 +94,8 @@ The Vanguard Opened in 1935 under Max Gordon, who ran it until his death in 1989
     end
     Event.jump   
   end
+
+
 
   def self.day_search(day)
     @count = 0
