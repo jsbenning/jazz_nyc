@@ -1,7 +1,7 @@
 class Event
   attr_accessor :venue, :day, :date, :time, :group, :bio
 
-  def initialize(event_hash)
+  def initialize(event_hash) # passed from Scraper, i.e. {"venue" => "Smalls"...}
     event_hash.each do |event_attribute, event_value|
       self.send("#{event_attribute}=", event_value)
     end
