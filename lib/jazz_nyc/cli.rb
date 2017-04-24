@@ -1,8 +1,9 @@
 class JazzNyc::CLI  
 
   def welcome
-    Scraper.smalls_scraper #call all scrapers here
-    Scraper.van_scraper
+    Scraper.start #call all scrapers here trhough start class method
+    #Scraper.van_scraper
+    #Scraper.bird_scraper
     Event.sort # put after the scrapers to make sure Event class is organized by date, then venue
     puts ""
     puts "      -----------------------------------------"

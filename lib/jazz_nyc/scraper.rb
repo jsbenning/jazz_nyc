@@ -2,6 +2,12 @@ class Scraper
   attr_accessor :events
   #venue, day, date, time=array, group=array, bio=array -- only Smalls currently
 
+  def self.start
+    self.smalls_scraper
+    self.van_scraper
+    self.bird_scraper
+  end
+
   def self.smalls_scraper
     events = Hash.new
     page = Nokogiri::HTML(open("https://www.smallslive.com/events/calendar/"))
@@ -42,80 +48,80 @@ class Scraper
       Event.new(events)
     end
   end
-end
 
-
-class Test
-  attr_accessor :events
-
-  require 'nokogiri'
-  require 'open-uri'
 
   def self.bird_scraper
     events = Hash.new
-    events[:testr] = "Crap"
+    
     page = Nokogiri::HTML(open("http://www.birdlandjazz.com/listing/"))
     page.css('div.tfly-venue-id-973').each do |e|
       events[:venue] = "Birdland"
       show = e.css("div[class='list-view-details vevent']")
-      events[:group] = show.css("h1[class='headliners summary']").text
-      if e.css('div.event-group-times')
+      group_arr = []
+      group_name = (show.css("h1[class='headliners summary']").text)
+      if !(e.css('div.event-group-times')).empty?
         group_shows = e.css('div.event-group-times')
-        events[:day] = group_shows.css('.date-time').text[0...3]
-        events[:date] = group_shows.css("h3[class='date-time']").text.slice(5..-2)
-        events[:time] = group_shows.css("h3[class='date-time']").css("a").map{|x| x.text}
+        long_day = group_shows.css('.date-time').text.split
+        events[:day] = long_day[0].gsub!(".", "")
+        month = long_day[1].downcase
+        new_month = self.standardize_month(month)
+        events[:date] = (new_month + long_day[2]).gsub!(":", "")
+        events[:time] = group_shows.css('.date-time').css("a").map{|x| x.text}
+        (events[:time].length).times{ group_arr.push(group_name) }
+        events[:group] = group_arr
+        events[:bio] = []
+        Event.new(events)
       else
-        events[:day] = show.css("h2[class='dates']").text[0...3]
-        events[:date] = show.css("h2[class='dates']").text.slice(5..-1)
-        events[:time] = Array.new.push(show.css("h2[class='times']").css('span').text)
+        events[:day] = show.css('.dates').text[0...3]
+        month = show.css('.dates').text.slice(5..-1).split[0].downcase
+        date = show.css('.dates').text.slice(5..-1).split[1]
+        if date.length == 1
+          new_date = "0" + date 
+        else 
+          new_date = date
+        end 
+        new_month = self.standardize_month(month)
+        events[:date] = new_month + new_date
+        events[:time] = Array.new.push(show.css('.times').css('span').text)
+        events[:group] = group_arr.push(group_name)
+        events[:bio] = []
+        Event.new(events)
       end    
     end
-    events
   end
 
+  def self.standardize_month(month)
+    case month
+    when "january"
+      "1/"
+    when "february"
+      "2/"
+    when "march"
+      "3/"
+    when "april"
+      "4/"
+    when "may"
+      "5/"
+    when "june"
+      "6/"
+    when "july"
+      "7/"
+    when "august"
+      "8/"
+    when "september"
+      "9/"
+    when "october"
+      "10/"
+    when "november"
+      "11/"
+    when "december"
+      "12/"
+    else
+      "huh?" 
+    end               
+  end
+  
 end
-
-
-
-
-
-      # if e.css("div[class='list-view-details vevent']")
-      # single_show = e.css("div[class='list-view-details vevent']")
-      #   single_show.each do |s|
-      #   # if s.css("h2[class='dates']")
-      #   #   events[:venue] = "Birdland"
-      #   #   events[:day] = s.css("h2[class='dates']").text[0...3]
-      #   #   events[:date] = s.css("h2[class='dates']").text.slice(5..-1)
-      #   #   events[:time] = Array.new.push(s.css("h2[class='times']").css('span').text)
-      #   if s.css("h3[class='date-time']")
-      #     events[:venue] = "Birdland"
-      #     events[:day] = e.css("h3[class='date-time']").text[0...3]
-      #     events[:date] = e.css("h3[class='date-time']").text.slice(5..-2)
-      #     events[:time] = e.css("h3[class='date-time']").css("a").map{|x| x.text}
-      #   end
-      # end 
-
-
-
-      # if e.css("[class='date-time']")
-      #   events[:existence] = true
-      #   events[:venue] = "Birdland"
-      #   events[:day] = e.css("h3[class='date-time']").text[0...3]
-      #   events[:date] = e.css("h3[class='date-time']").text.slice(5..-2)
-      #   events[:time] = e.css("h3[class='date-time']").css("a").text
-      #end 
-      #else
-
-
-
-
-
-
-
-
-
-
-
 
 
 
